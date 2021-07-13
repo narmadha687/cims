@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +26,14 @@ public class AlertController
 	@RequestMapping
 	public String getAllAlerts(Model model)
 	{
-		List<AlertEntity> list = service.getAllAlerts();
+		List<AlertEntity> allAlerts = service.getAllAlerts();
+		List<AlertEntity> openAlerts = new ArrayList<>();
 
-		model.addAttribute("alerts", list);
+		for(AlertEntity alert : allAlerts)
+			if(! alert.getStatus().equalsIgnoreCase("Closed"))
+				openAlerts.add(alert);
+
+		model.addAttribute("alerts", openAlerts);
 		return "list-alerts";
 	}
 
