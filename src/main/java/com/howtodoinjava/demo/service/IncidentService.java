@@ -1,12 +1,13 @@
 package com.howtodoinjava.demo.service;
 
 import com.howtodoinjava.demo.exception.RecordNotFoundException;
+import com.howtodoinjava.demo.model.AlertEntity;
 import com.howtodoinjava.demo.model.IncidentEntity;
+import com.howtodoinjava.demo.repository.AlertRepository;
 import com.howtodoinjava.demo.repository.IncidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,9 @@ public class IncidentService {
 
     @Autowired
     IncidentRepository repository;
+
+    @Autowired
+    AlertRepository alertRepository;
 
     public List<IncidentEntity> getAllIncidents() {
         List<IncidentEntity> incidents = repository.findIncidentsByStatus("open");
@@ -35,17 +39,27 @@ public class IncidentService {
 
     public IncidentEntity updateIncident(IncidentEntity entity) {
         Optional<IncidentEntity> incident = repository.findById(entity.getIncident_id());
+        IncidentEntity newEntity = null;
+
         if (incident.isPresent()) {
-            IncidentEntity newEntity = incident.get();
+            newEntity = incident.get();
             newEntity.setStatus(entity.getStatus());
             newEntity.setSeverity(entity.getSeverity());
             newEntity.setAssignee(entity.getAssignee());
             newEntity = repository.save(newEntity);
-            return newEntity;
         } else {
-            entity = repository.save(entity);
-            return entity;
+            newEntity = repository.save(entity);
         }
+
+        if (entity.getStatus().equalsIgnoreCase("Closed")) {
+            System.out.println("************************** CLOSE ALERTS!!!");
+            List<AlertEntity> alerts = alertRepository.findByIncidentid(newEntity.getIncident_id());
+            for (AlertEntity alert : alerts) {
+                alert.setStatus("Closed");
+                alertRepository.save(alert);
+            }
+        }
+        return newEntity;
     }
 
     public void deleteIncidentById(Long id) throws RecordNotFoundException {

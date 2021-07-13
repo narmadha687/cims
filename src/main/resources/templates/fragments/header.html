@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/styles/css/cims.css}" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+
+<body>
+<header th:fragment="header">
+    <div id="header">
+        <table class="table table-striped table-responsive-md" width="100%">
+            <thead>
+            <tr>
+                <td width="15%"><a href="/home"><img th:src="@{img/home.png}" width="45" height="35"/></a></td>
+                <td width="15%"><a href="/incidents"><img th:src="@{img/incidents.png}" width="45" height="35"/></a></td>
+                <td width="15%"><a href="/alerts"><img th:src="@{img/alerts.png}" width="45" height="35"/></a></td>
+                <td width="15%"><a href="/event"><img th:src="@{img/sendevent.jpeg}" width="45" height="35"/></a></td>
+                <td width="15%"><a href="/users"><img th:src="@{img/users.png}" width="45" height="35"/></a></td>
+                <td align="right"><a href="/">Logout</a></td>
+            </tr>
+            <!--            <tr>-->
+            <!--                <td width="15%"><a href="/home"><img th:src="@{img/home.png}" width="60" height="45"/></a></td>-->
+            <!--                <td width="15%"><a href="/incidents">Incidents</a></td>-->
+            <!--                <td width="15%"><a href="/alerts">Alerts</a></td>-->
+            <!--                <td width="15%"><a href="/event">Send Event</a></td>-->
+            <!--                <td width="15%"><a href="/users">User Management</a></td>-->
+            <!--                <td align="right"><a href="/">Logout</a></td>-->
+            <!--            </tr>-->
+            </thead>
+        </table>
+    </div>
+</header>
+
+</body>
+
+</html>

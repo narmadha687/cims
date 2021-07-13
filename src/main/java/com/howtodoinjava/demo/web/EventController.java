@@ -30,14 +30,6 @@ public class EventController {
     @Autowired
     IncidentService incidentService;
 
-//    @RequestMapping
-//    public String getAllEvents(Model model) {
-//        List<EventEntity> list = service.getAllEvents();
-//
-//        model.addAttribute("events", list);
-//        return "event";
-//    }
-
     @RequestMapping
     public String addEvent(Model model, @PathVariable("id") Optional<Long> id) throws RecordNotFoundException {
         model.addAttribute("event", new EventEntity());
@@ -53,7 +45,13 @@ public class EventController {
         service.createEvent(event);
 
         AlertEntity alert = createAlert(event);
-        createIncident(alert);
+        IncidentEntity incident = createIncident(alert);
+
+        System.out.println("&&&&&&&&&&&&&&&&& ALERT       = " + alert);
+        System.out.println("&&&&&&&&&&&&&&&&& INCIDENT    = " + incident);
+        System.out.println("&&&&&&&&&&&&&&&&& INCIDENT ID = " + incident.getIncident_id());
+        alert.setIncidentid(incident.getIncident_id());
+        alertService.createOrUpdateAlert(alert);
 
         return "redirect:/alerts";
     }
@@ -103,6 +101,7 @@ public class EventController {
                 incident.setTotal_alerts(incident.getTotal_alerts() + 1);
                 incidentService.updateIncident(incident);
                 incidentUpdated = true;
+                x = incident;
                 break;
             } else {
                 for (String source : sources) {
@@ -115,6 +114,7 @@ public class EventController {
                         incident.setTotal_alerts(incident.getTotal_alerts() + 1);
                         incidentService.updateIncident(incident);
                         incidentUpdated = true;
+                        x = incident;
                         break;
                     }
                 }
@@ -132,7 +132,9 @@ public class EventController {
                     .total_alerts(1)
                     .build();
             incidentService.updateIncident(incident);
+            x = incident;
         }
+
         return x;
     }
 }

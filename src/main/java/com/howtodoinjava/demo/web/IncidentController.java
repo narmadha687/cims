@@ -2,7 +2,9 @@ package com.howtodoinjava.demo.web;
 
 import com.howtodoinjava.demo.exception.RecordNotFoundException;
 import com.howtodoinjava.demo.model.IncidentEntity;
+import com.howtodoinjava.demo.model.UserEntity;
 import com.howtodoinjava.demo.service.IncidentService;
+import com.howtodoinjava.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +18,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/incidents")
 public class IncidentController {
+
     @Autowired
     IncidentService service;
+
+    @Autowired
+    UserService userService;
 
     @RequestMapping
     public String getAllIncidents(Model model) {
@@ -29,12 +35,11 @@ public class IncidentController {
 
     @RequestMapping(path = {"/edit", "/edit/{id}"})
     public String editIncidentById(Model model, @PathVariable("id") Optional<Long> id) throws RecordNotFoundException {
-        if (id.isPresent()) {
-            IncidentEntity entity = service.getIncidentById(id.get());
-            model.addAttribute("incident", entity);
-        } else {
-            model.addAttribute("incident", new IncidentEntity());
-        }
+        List<UserEntity> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+
+        IncidentEntity entity = id.isPresent() ? service.getIncidentById(id.get()) : new IncidentEntity();
+        model.addAttribute("incident", entity);
         return "add-edit-incident";
     }
 

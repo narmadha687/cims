@@ -1,6 +1,6 @@
 package com.howtodoinjava.demo.web;
 
-import com.howtodoinjava.demo.service.EmployeeService;
+import com.howtodoinjava.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 
     @Autowired
-    EmployeeService service;
+    UserService service;
 
     @RequestMapping
     public String home() {
